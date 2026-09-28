@@ -1,0 +1,886 @@
+{
+  "info": {
+    "name": "VadicMall API",
+    "description": "Complete API collection for the Vadic Mall Vedic Astrology Platform — Auth, Catalog, Customer, Admin, Health.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5080" },
+    { "key": "token", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "productId", "value": "" },
+    { "key": "poojaServiceId", "value": "" },
+    { "key": "astrologerId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "blogSlug", "value": "understanding-birth-chart" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register (Customer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer1@example.com\",\n  \"password\": \"Customer@123\",\n  \"firstName\": \"Rohit\",\n  \"lastName\": \"Verma\",\n  \"phone\": \"+91 9876543210\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "  pm.collectionVariables.set('refreshToken', body.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refreshToken\": \"sW6Uq6dOA8YKvuF5JeibvCN4SL6whI3db5lxIKXF/N4rAZPhNKGeg7gUtTMPAHZACRRq5Oh/fYG0beTf8PeaUw==\",\n  \"user\": {\n    \"id\": \"f8e7cb48-c411-4725-b124-971a2854ebc1\",\n    \"email\": \"customer1@example.com\",\n    \"firstName\": \"Rohit\",\n    \"lastName\": \"Verma\",\n    \"phone\": \"+91 9876543210\",\n    \"role\": \"Customer\",\n    \"avatarUrl\": null\n  },\n  \"expiresAt\": \"2026-09-01T07:49:10.513159Z\"\n}"
+            },
+            {
+              "name": "400 Bad Request - Email already registered",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{ \"message\": \"Email already registered\" }"
+            }
+          ]
+        },
+        {
+          "name": "Register Astrologer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/register-astrologer", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register-astrologer"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"astro.new@example.com\",\n  \"password\": \"Astro@123\",\n  \"firstName\": \"Ravi\",\n  \"lastName\": \"Shastri\",\n  \"phone\": \"+91 9123456780\",\n  \"specialization\": \"Vedic Astrology\",\n  \"bio\": \"15 years experience in horoscope reading.\",\n  \"experienceYears\": 15,\n  \"consultationFee\": 799\n}"
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refreshToken\": \"...\",\n  \"user\": {\n    \"id\": \"5c6a1e2b-1234-4a11-9abc-1234567890ab\",\n    \"email\": \"astro.new@example.com\",\n    \"firstName\": \"Ravi\",\n    \"lastName\": \"Shastri\",\n    \"phone\": \"+91 9123456780\",\n    \"role\": \"Astrologer\",\n    \"avatarUrl\": null\n  },\n  \"expiresAt\": \"2026-09-01T07:49:10.513159Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@vadicmall.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('token', body.token);",
+                  "  pm.collectionVariables.set('refreshToken', body.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refreshToken\": \"3mcexyv1Be3OIGYHE1nFTQXo+2pD9NXJ6aUFY3L015JK5HnIZmHP3YwEcKp9/lXVxAvNdyLD8jArPMT9JcSIxg==\",\n  \"user\": {\n    \"id\": \"f8e7cb48-c411-4725-b124-971a2854ebc1\",\n    \"email\": \"admin@vadicmall.com\",\n    \"firstName\": \"Super\",\n    \"lastName\": \"Admin\",\n    \"phone\": null,\n    \"role\": \"SuperAdmin\",\n    \"avatarUrl\": null\n  },\n  \"expiresAt\": \"2026-09-01T07:49:22.637809Z\"\n}"
+            },
+            {
+              "name": "401 Unauthorized",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{ \"message\": \"Invalid email or password\" }"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/refresh-token", "host": ["{{baseUrl}}"], "path": ["api", "auth", "refresh-token"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refreshToken\": \"...\",\n  \"user\": { \"id\": \"...\", \"email\": \"admin@vadicmall.com\", \"firstName\": \"Super\", \"lastName\": \"Admin\", \"phone\": null, \"role\": \"SuperAdmin\", \"avatarUrl\": null },\n  \"expiresAt\": \"2026-09-01T08:49:22.637809Z\"\n}"
+            },
+            {
+              "name": "401 Unauthorized - Invalid/expired refresh token",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{ \"message\": \"Invalid refresh token\" }"
+            }
+          ]
+        },
+        {
+          "name": "Get Current User (me)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"f8e7cb48-c411-4725-b124-971a2854ebc1\",\n  \"email\": \"admin@vadicmall.com\",\n  \"firstName\": \"Super\",\n  \"lastName\": \"Admin\",\n  \"phone\": null,\n  \"role\": \"SuperAdmin\",\n  \"avatarUrl\": null\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/change-password", "host": ["{{baseUrl}}"], "path": ["api", "auth", "change-password"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Admin@123\",\n  \"newPassword\": \"NewAdmin@456\"\n}"
+            }
+          },
+          "response": [
+            { "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Password changed successfully\" }" },
+            { "name": "401 Unauthorized - Wrong current password", "status": "Unauthorized", "code": 401, "body": "{ \"message\": \"Current password is incorrect\" }" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "item": [
+        {
+          "name": "Get Pooja Services",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/pooja-services?category=&search=&featured=",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "pooja-services"],
+              "query": [
+                { "key": "category", "value": "", "description": "optional, e.g. Ganesh Puja" },
+                { "key": "search", "value": "", "description": "optional text search" },
+                { "key": "featured", "value": "", "description": "optional true/false" }
+              ]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"e1000001-0000-0000-0000-000000000001\",\n    \"name\": \"Ganesh Puja\",\n    \"slug\": \"ganesh-puja\",\n    \"category\": \"Ganesh Puja\",\n    \"description\": \"Remove obstacles and invite prosperity with authentic Ganesh Puja.\",\n    \"price\": 2100.00,\n    \"salePrice\": 1800.00,\n    \"durationMinutes\": 90,\n    \"imageUrl\": \"/images/pooja/ganesh-puja.jpg\",\n    \"isFeatured\": true,\n    \"rating\": 4.8,\n    \"reviewCount\": 210,\n    \"festivalTag\": \"Ganesh Chaturthi\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Pooja Service By Id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/pooja-services/{{poojaServiceId}}", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "pooja-services", "{{poojaServiceId}}"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"e1000001-0000-0000-0000-000000000001\",\n  \"name\": \"Ganesh Puja\",\n  \"slug\": \"ganesh-puja\",\n  \"category\": \"Ganesh Puja\",\n  \"description\": \"Remove obstacles and invite prosperity with authentic Ganesh Puja.\",\n  \"price\": 2100.00,\n  \"salePrice\": 1800.00,\n  \"durationMinutes\": 90,\n  \"imageUrl\": \"/images/pooja/ganesh-puja.jpg\",\n  \"isFeatured\": true,\n  \"rating\": 4.8,\n  \"reviewCount\": 210,\n  \"festivalTag\": \"Ganesh Chaturthi\"\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/products?category=&search=&minPrice=&maxPrice=&featured=",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "products"],
+              "query": [
+                { "key": "category", "value": "", "description": "optional slug, e.g. gemstones" },
+                { "key": "search", "value": "", "description": "optional text search" },
+                { "key": "minPrice", "value": "", "description": "optional" },
+                { "key": "maxPrice", "value": "", "description": "optional" },
+                { "key": "featured", "value": "", "description": "optional true/false" }
+              ]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"e5000001-0000-0000-0000-000000000003\",\n    \"name\": \"5 Mukhi Rudraksha Mala\",\n    \"slug\": \"rudraksha-mala-5\",\n    \"description\": \"Authentic Nepali 5 Mukhi Rudraksha mala, 108 beads.\",\n    \"categoryName\": \"Malas\",\n    \"price\": 1200.00,\n    \"salePrice\": 960.00,\n    \"stockQuantity\": 50,\n    \"rating\": 4.5,\n    \"reviewCount\": 120,\n    \"isFeatured\": true,\n    \"primaryImage\": \"/images/products/rudraksha-mala-5.jpg\",\n    \"festivalTag\": \"Maha Shivratri\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "products", "{{productId}}"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"e5000001-0000-0000-0000-000000000003\",\n  \"name\": \"5 Mukhi Rudraksha Mala\",\n  \"slug\": \"rudraksha-mala-5\",\n  \"description\": \"Authentic Nepali 5 Mukhi Rudraksha mala, 108 beads.\",\n  \"categoryName\": \"Malas\",\n  \"price\": 1200.00,\n  \"salePrice\": 960.00,\n  \"stockQuantity\": 50,\n  \"rating\": 4.5,\n  \"reviewCount\": 120,\n  \"isFeatured\": true,\n  \"images\": [\"/images/products/rudraksha-mala-5.jpg\"],\n  \"reviews\": [\n    { \"id\": \"r1\", \"userName\": \"Amit K.\", \"rating\": 5, \"comment\": \"Very authentic, fast delivery.\", \"createdAt\": \"2026-07-10T10:00:00Z\" }\n  ],\n  \"festivalTag\": \"Maha Shivratri\"\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Get Astrologers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/astrologers?specialization=&search=",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "astrologers"],
+              "query": [
+                { "key": "specialization", "value": "", "description": "optional, e.g. Vedic Astrology" },
+                { "key": "search", "value": "", "description": "optional text search" }
+              ]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"a1000001-0000-0000-0000-000000000003\",\n    \"name\": \"Pandit Sharma\",\n    \"specialization\": \"Vedic Astrology\",\n    \"bio\": \"25 years of experience in Vedic astrology and pooja rituals.\",\n    \"experienceYears\": 25,\n    \"consultationFee\": 999.00,\n    \"rating\": 4.9,\n    \"reviewCount\": 342,\n    \"isFeatured\": true,\n    \"avatarUrl\": null,\n    \"languages\": \"Hindi, English, Sanskrit\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Astrologer By Id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/astrologers/{{astrologerId}}", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "astrologers", "{{astrologerId}}"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"a1000001-0000-0000-0000-000000000003\",\n  \"name\": \"Pandit Sharma\",\n  \"specialization\": \"Vedic Astrology\",\n  \"bio\": \"25 years of experience in Vedic astrology and pooja rituals.\",\n  \"experienceYears\": 25,\n  \"consultationFee\": 999.00,\n  \"rating\": 4.9,\n  \"reviewCount\": 342,\n  \"isFeatured\": true,\n  \"avatarUrl\": null,\n  \"languages\": \"Hindi, English, Sanskrit\"\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Get Festival Offers",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/festival-offers", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "festival-offers"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"festival\": \"Diwali\",\n    \"description\": \"Diwali special offers on gemstones and Lakshmi Puja\",\n    \"discountPercent\": 30,\n    \"imageUrl\": \"/images/festivals/diwali.jpg\",\n    \"services\": [],\n    \"products\": []\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Subscription Plans",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/subscription-plans", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "subscription-plans"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"s1000001-0000-0000-0000-000000000002\",\n    \"name\": \"Premium\",\n    \"slug\": \"premium\",\n    \"description\": \"Weekly horoscope with pooja bookings\",\n    \"price\": 499.00,\n    \"billingCycle\": \"Monthly\",\n    \"features\": [\"Weekly Horoscope\", \"5 Kundli Checks\", \"2 Pooja Bookings\", \"Chat Support\"],\n    \"isPopular\": true\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Gift Card Types",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/gift-cards", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "gift-cards"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"type\": \"E-Gift Card\", \"denominations\": [500, 1000, 2000, 5000] }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Blog Posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/blog?category=",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "blog"],
+              "query": [{ "key": "category", "value": "", "description": "optional, e.g. astrology-tips" }]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"b1000001-0000-0000-0000-000000000001\",\n    \"title\": \"Understanding Your Birth Chart\",\n    \"slug\": \"understanding-birth-chart\",\n    \"excerpt\": \"Learn the basics of Vedic birth chart interpretation.\",\n    \"imageUrl\": \"/images/blog/birth-chart.jpg\",\n    \"author\": \"Pandit Sharma\",\n    \"categoryName\": \"Astrology Tips\",\n    \"createdAt\": \"2026-07-01T09:00:00Z\",\n    \"viewCount\": 1250\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Blog Post By Slug",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/blog/{{blogSlug}}", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "blog", "{{blogSlug}}"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"b1000001-0000-0000-0000-000000000001\",\n  \"title\": \"Understanding Your Birth Chart\",\n  \"slug\": \"understanding-birth-chart\",\n  \"excerpt\": \"Learn the basics of Vedic birth chart interpretation.\",\n  \"content\": \"Your birth chart, or Kundli, is a cosmic snapshot of the sky at the moment of your birth...\",\n  \"imageUrl\": \"/images/blog/birth-chart.jpg\",\n  \"author\": \"Pandit Sharma\",\n  \"categoryName\": \"Astrology Tips\",\n  \"createdAt\": \"2026-07-01T09:00:00Z\",\n  \"viewCount\": 1251\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Get FAQs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/faqs?category=",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "faqs"],
+              "query": [{ "key": "category", "value": "", "description": "optional, e.g. Pooja" }]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"f1000001-0000-0000-0000-000000000001\",\n    \"question\": \"How do I book a pooja service?\",\n    \"answer\": \"Browse our pooja catalog, select a service, choose date and time, and complete payment.\",\n    \"category\": \"Pooja\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Testimonials",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/catalog/testimonials", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "testimonials"] },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"name\": \"Priya S.\", \"location\": \"Mumbai\", \"comment\": \"Excellent consultation experience!\", \"rating\": 5, \"avatarUrl\": null }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Submit Contact Form",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/catalog/contact", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "contact"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rohit Verma\",\n  \"email\": \"rohit@example.com\",\n  \"phone\": \"+91 9876543210\",\n  \"subject\": \"Product query\",\n  \"message\": \"Is the Blue Sapphire certified?\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            { "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Thank you for contacting us. We will respond shortly.\" }" }
+          ]
+        },
+        {
+          "name": "Subscribe Newsletter",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/catalog/newsletter", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "newsletter"] },
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"rohit@example.com\"\n}" },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            { "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Successfully subscribed to newsletter\" }" }
+          ]
+        },
+        {
+          "name": "Validate Coupon",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/catalog/coupons/validate", "host": ["{{baseUrl}}"], "path": ["api", "catalog", "coupons", "validate"] },
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"DIWALI30\",\n  \"orderTotal\": 2500\n}" },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK - Valid",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"isValid\": true, \"message\": \"Coupon applied successfully\", \"discountAmount\": 750.00, \"couponCode\": \"DIWALI30\" }"
+            },
+            {
+              "name": "200 OK - Invalid/Expired",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"isValid\": false, \"message\": \"Coupon code is invalid or expired\", \"discountAmount\": 0, \"couponCode\": null }"
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/catalog/search?q=rudraksha",
+              "host": ["{{baseUrl}}"], "path": ["api", "catalog", "search"],
+              "query": [{ "key": "q", "value": "rudraksha" }]
+            },
+            "auth": { "type": "noauth" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"products\": [ { \"id\": \"e5000001-0000-0000-0000-000000000003\", \"name\": \"5 Mukhi Rudraksha Mala\", \"slug\": \"rudraksha-mala-5\" } ],\n  \"poojaServices\": [],\n  \"astrologers\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Customer (requires CustomerOnly token)",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/cart", "host": ["{{baseUrl}}"], "path": ["api", "customer", "cart"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"items\": [\n    { \"id\": \"c1\", \"productId\": \"e5000001-0000-0000-0000-000000000003\", \"productName\": \"5 Mukhi Rudraksha Mala\", \"price\": 1200.00, \"salePrice\": 960.00, \"imageUrl\": \"/images/products/rudraksha-mala-5.jpg\", \"quantity\": 2, \"lineTotal\": 1920.00 }\n  ],\n  \"subTotal\": 1920.00,\n  \"itemCount\": 2\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add To Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/cart", "host": ["{{baseUrl}}"], "path": ["api", "customer", "cart"] },
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 1\n}" }
+          },
+          "response": [{ "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Added to cart\" }" }]
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/cart/{{productId}}", "host": ["{{baseUrl}}"], "path": ["api", "customer", "cart", "{{productId}}"] },
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 3\n}" }
+          },
+          "response": [{ "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Cart updated\" }" }]
+        },
+        {
+          "name": "Remove From Cart",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/customer/cart/{{productId}}", "host": ["{{baseUrl}}"], "path": ["api", "customer", "cart", "{{productId}}"] }
+          },
+          "response": [{ "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Removed from cart\" }" }]
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/customer/cart/clear", "host": ["{{baseUrl}}"], "path": ["api", "customer", "cart", "clear"] }
+          },
+          "response": [{ "name": "200 OK", "status": "OK", "code": 200, "body": "{ \"message\": \"Cart cleared\" }" }]
+        },
+        {
+          "name": "Get Orders",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/orders", "host": ["{{baseUrl}}"], "path": ["api", "customer", "orders"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": \"o1000001-0000-0000-0000-000000000001\",\n    \"orderNumber\": \"VM-20260830-0001\",\n    \"status\": \"Processing\",\n    \"total\": 1920.00,\n    \"createdAt\": \"2026-08-30T12:00:00Z\",\n    \"items\": [\n      { \"productId\": \"e5000001-0000-0000-0000-000000000003\", \"productName\": \"5 Mukhi Rudraksha Mala\", \"quantity\": 2, \"unitPrice\": 960.00, \"totalPrice\": 1920.00 }\n    ]\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Order By Id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/orders/{{orderId}}", "host": ["{{baseUrl}}"], "path": ["api", "customer", "orders", "{{orderId}}"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"o1000001-0000-0000-0000-000000000001\",\n  \"orderNumber\": \"VM-20260830-0001\",\n  \"status\": \"Processing\",\n  \"total\": 1920.00,\n  \"createdAt\": \"2026-08-30T12:00:00Z\",\n  \"items\": [\n    { \"productId\": \"e5000001-0000-0000-0000-000000000003\", \"productName\": \"5 Mukhi Rudraksha Mala\", \"quantity\": 2, \"unitPrice\": 960.00, \"totalPrice\": 1920.00 }\n  ]\n}"
+            },
+            { "name": "404 Not Found", "status": "Not Found", "code": 404, "body": "" }
+          ]
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/orders", "host": ["{{baseUrl}}"], "path": ["api", "customer", "orders"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddressId\": null,\n  \"couponCode\": \"DIWALI30\",\n  \"paymentMethod\": \"UPI\"\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": \"o1000001-0000-0000-0000-000000000002\",\n  \"orderNumber\": \"VM-20260831-0002\",\n  \"status\": \"Pending\",\n  \"total\": 1170.00,\n  \"createdAt\": \"2026-08-31T21:00:00Z\",\n  \"items\": [\n    { \"productId\": \"e5000001-0000-0000-0000-000000000003\", \"productName\": \"5 Mukhi Rudraksha Mala\", \"quantity\": 2, \"unitPrice\": 960.00, \"totalPrice\": 1920.00 }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Order Tracking",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/orders/{{orderId}}/tracking", "host": ["{{baseUrl}}"], "path": ["api", "customer", "orders", "{{orderId}}", "tracking"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"status\": \"Pending\", \"notes\": \"Order placed\", \"location\": null, \"createdAt\": \"2026-08-31T21:00:00Z\" },\n  { \"status\": \"Processing\", \"notes\": \"Payment confirmed\", \"location\": \"Mumbai Warehouse\", \"createdAt\": \"2026-08-31T22:00:00Z\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Pooja Bookings",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/pooja-bookings", "host": ["{{baseUrl}}"], "path": ["api", "customer", "pooja-bookings"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"pb1\", \"serviceName\": \"Ganesh Puja\", \"scheduledDate\": \"2026-09-05T00:00:00Z\", \"scheduledTime\": \"10:00 AM\", \"status\": \"Confirmed\", \"amount\": 1800.00, \"createdAt\": \"2026-08-31T20:00:00Z\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create Pooja Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/pooja-bookings", "host": ["{{baseUrl}}"], "path": ["api", "customer", "pooja-bookings"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"poojaServiceId\": \"{{poojaServiceId}}\",\n  \"scheduledDate\": \"2026-09-05T00:00:00Z\",\n  \"scheduledTime\": \"10:00 AM\",\n  \"specialInstructions\": \"Please bring extra flowers\"\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"id\": \"pb2\", \"serviceName\": \"Ganesh Puja\", \"scheduledDate\": \"2026-09-05T00:00:00Z\", \"scheduledTime\": \"10:00 AM\", \"status\": \"Pending\", \"amount\": 1800.00, \"createdAt\": \"2026-08-31T21:10:00Z\" }"
+            }
+          ]
+        },
+        {
+          "name": "Get Kundli Requests",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/kundli-requests", "host": ["{{baseUrl}}"], "path": ["api", "customer", "kundli-requests"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"k1\", \"name\": \"Rohit Verma\", \"status\": \"Completed\", \"amount\": 499.00, \"createdAt\": \"2026-08-25T10:00:00Z\", \"reportUrl\": \"/reports/k1.pdf\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create Kundli Request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/kundli-requests", "host": ["{{baseUrl}}"], "path": ["api", "customer", "kundli-requests"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rohit Verma\",\n  \"dateOfBirth\": \"1995-04-12T00:00:00Z\",\n  \"timeOfBirth\": \"14:30\",\n  \"placeOfBirth\": \"Jaipur, India\",\n  \"gender\": \"Male\",\n  \"amount\": 499\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"id\": \"k2\", \"name\": \"Rohit Verma\", \"status\": \"Pending\", \"amount\": 499.00, \"createdAt\": \"2026-08-31T21:15:00Z\", \"reportUrl\": null }"
+            }
+          ]
+        },
+        {
+          "name": "Subscribe to Plan",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/subscriptions", "host": ["{{baseUrl}}"], "path": ["api", "customer", "subscriptions"] },
+            "body": { "mode": "raw", "raw": "{\n  \"subscriptionPlanId\": \"s1000001-0000-0000-0000-000000000002\",\n  \"paymentMethod\": \"UPI\"\n}" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"id\": \"sub1\", \"planName\": \"Premium\", \"price\": 499.00, \"startDate\": \"2026-08-31T00:00:00Z\", \"endDate\": \"2026-09-30T00:00:00Z\", \"status\": \"Active\" }"
+            }
+          ]
+        },
+        {
+          "name": "Get My Subscriptions",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/subscriptions", "host": ["{{baseUrl}}"], "path": ["api", "customer", "subscriptions"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"sub1\", \"planName\": \"Premium\", \"price\": 499.00, \"startDate\": \"2026-08-31T00:00:00Z\", \"endDate\": \"2026-09-30T00:00:00Z\", \"status\": \"Active\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Purchase Gift Card",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/gift-cards/purchase", "host": ["{{baseUrl}}"], "path": ["api", "customer", "gift-cards", "purchase"] },
+            "body": { "mode": "raw", "raw": "{\n  \"type\": \"E-Gift Card\",\n  \"amount\": 1000,\n  \"paymentMethod\": \"Card\"\n}" }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"id\": \"gc1\", \"code\": \"VMGC-8F3K2L\", \"amount\": 1000.00, \"balance\": 1000.00, \"status\": \"Active\" }"
+            }
+          ]
+        },
+        {
+          "name": "Get Addresses",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/customer/addresses", "host": ["{{baseUrl}}"], "path": ["api", "customer", "addresses"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"addr1\", \"fullName\": \"Rohit Verma\", \"phone\": \"+91 9876543210\", \"addressLine1\": \"12 MG Road\", \"addressLine2\": null, \"city\": \"Mumbai\", \"state\": \"Maharashtra\", \"pincode\": \"400001\", \"country\": \"India\", \"isDefault\": true }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create Address",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/customer/addresses", "host": ["{{baseUrl}}"], "path": ["api", "customer", "addresses"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Rohit Verma\",\n  \"phone\": \"+91 9876543210\",\n  \"addressLine1\": \"12 MG Road\",\n  \"addressLine2\": null,\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"pincode\": \"400001\",\n  \"country\": \"India\",\n  \"isDefault\": true\n}"
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"id\": \"addr1\", \"fullName\": \"Rohit Verma\", \"phone\": \"+91 9876543210\", \"addressLine1\": \"12 MG Road\", \"addressLine2\": null, \"city\": \"Mumbai\", \"state\": \"Maharashtra\", \"pincode\": \"400001\", \"country\": \"India\", \"isDefault\": true }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin (requires AdminOnly token)",
+      "item": [
+        {
+          "name": "Dashboard Stats",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/admin/dashboard", "host": ["{{baseUrl}}"], "path": ["api", "admin", "dashboard"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"totalUsers\": 128,\n  \"totalAstrologers\": 5,\n  \"totalOrders\": 342,\n  \"totalBookings\": 87,\n  \"totalRevenue\": 458200.50,\n  \"pendingOrders\": 12,\n  \"pendingBookings\": 4,\n  \"lowStockProducts\": 3\n}"
+            },
+            { "name": "403 Forbidden - not admin", "status": "Forbidden", "code": 403, "body": "" }
+          ]
+        },
+        {
+          "name": "Revenue Chart",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard/charts/revenue?months=6",
+              "host": ["{{baseUrl}}"], "path": ["api", "admin", "dashboard", "charts", "revenue"],
+              "query": [{ "key": "months", "value": "6" }]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"label\": \"Mar\", \"revenue\": 62000.00 },\n  { \"label\": \"Apr\", \"revenue\": 71000.00 },\n  { \"label\": \"May\", \"revenue\": 68500.00 },\n  { \"label\": \"Jun\", \"revenue\": 75200.00 },\n  { \"label\": \"Jul\", \"revenue\": 81300.00 },\n  { \"label\": \"Aug\", \"revenue\": 100200.50 }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Recent Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard/recent-orders?count=10",
+              "host": ["{{baseUrl}}"], "path": ["api", "admin", "dashboard", "recent-orders"],
+              "query": [{ "key": "count", "value": "10" }]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"o1\", \"orderNumber\": \"VM-20260831-0002\", \"customerName\": \"Rohit Verma\", \"total\": 1170.00, \"status\": \"Pending\", \"createdAt\": \"2026-08-31T21:00:00Z\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "List Users",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/admin/users", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"f8e7cb48-c411-4725-b124-971a2854ebc1\", \"email\": \"admin@vadicmall.com\", \"firstName\": \"Super\", \"lastName\": \"Admin\", \"role\": \"SuperAdmin\", \"isActive\": true, \"createdAt\": \"2026-08-31T21:49:10Z\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "List Products",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/admin/products", "host": ["{{baseUrl}}"], "path": ["api", "admin", "products"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"e5000001-0000-0000-0000-000000000003\", \"name\": \"5 Mukhi Rudraksha Mala\", \"category\": \"Malas\", \"price\": 1200.00, \"salePrice\": 960.00, \"stockQuantity\": 50, \"isFeatured\": true, \"isActive\": true }\n]"
+            }
+          ]
+        },
+        {
+          "name": "List Pooja Services",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/admin/pooja-services", "host": ["{{baseUrl}}"], "path": ["api", "admin", "pooja-services"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"e1000001-0000-0000-0000-000000000001\", \"name\": \"Ganesh Puja\", \"category\": \"Ganesh Puja\", \"price\": 2100.00, \"isFeatured\": true, \"isActive\": true }\n]"
+            }
+          ]
+        },
+        {
+          "name": "List Orders",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/admin/orders", "host": ["{{baseUrl}}"], "path": ["api", "admin", "orders"] } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  { \"id\": \"o1000001-0000-0000-0000-000000000002\", \"orderNumber\": \"VM-20260831-0002\", \"customerName\": \"Rohit Verma\", \"total\": 1170.00, \"status\": \"Pending\", \"createdAt\": \"2026-08-31T21:00:00Z\" }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }, "auth": { "type": "noauth" } },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{ \"status\": \"healthy\", \"service\": \"VadicMall API\", \"timestamp\": \"2026-08-31T21:49:10.513159Z\" }"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

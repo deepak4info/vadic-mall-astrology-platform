@@ -1,0 +1,22 @@
+namespace VadicMall.Application.DTOs.Catalog;
+
+public record PoojaServiceDto(Guid Id, string Name, string Slug, string Category, string Description, decimal Price, decimal? SalePrice, int DurationMinutes, string? ImageUrl, bool IsFeatured, decimal Rating, int ReviewCount, string? FestivalTag);
+public record ProductDto(Guid Id, string Name, string Slug, string Description, string CategoryName, decimal Price, decimal? SalePrice, int StockQuantity, decimal Rating, int ReviewCount, bool IsFeatured, string? PrimaryImage, string? FestivalTag);
+public record ProductDetailDto(Guid Id, string Name, string Slug, string Description, string CategoryName, decimal Price, decimal? SalePrice, int StockQuantity, decimal Rating, int ReviewCount, bool IsFeatured, List<string> Images, List<ReviewDto> Reviews, string? FestivalTag);
+public record ReviewDto(Guid Id, string UserName, int Rating, string Comment, DateTime CreatedAt);
+public record AstrologerDto(Guid Id, string Name, string Specialization, string Bio, int ExperienceYears, decimal ConsultationFee, decimal Rating, int ReviewCount, bool IsFeatured, string? AvatarUrl, string? Languages);
+public record SubscriptionPlanDto(Guid Id, string Name, string Slug, string Description, decimal Price, string BillingCycle, List<string> Features, bool IsPopular);
+public record GiftCardTypeDto(string Type, decimal[] Denominations);
+public record FestivalOfferDto(string Festival, string Description, int DiscountPercent, string? ImageUrl, List<PoojaServiceDto> Services, List<ProductDto> Products);
+public record BlogPostDto(Guid Id, string Title, string Slug, string Excerpt, string? ImageUrl, string Author, string CategoryName, DateTime CreatedAt, int ViewCount);
+public record BlogPostDetailDto(Guid Id, string Title, string Slug, string Excerpt, string Content, string? ImageUrl, string Author, string CategoryName, DateTime CreatedAt, int ViewCount);
+public record FaqDto(Guid Id, string Question, string Answer, string Category);
+public record TestimonialDto(string Name, string Location, string Comment, int Rating, string? AvatarUrl);
+public record ContactRequest(string Name, string Email, string Phone, string Subject, string Message);
+public record NewsletterRequest(string Email);
+public record CouponValidationRequest(string Code, decimal OrderTotal);
+public record CouponValidationResponse(bool IsValid, string Message, decimal DiscountAmount, string? CouponCode);
+public record GiftCardValidationRequest(string Code);
+public record GiftCardValidationResponse(bool IsValid, string Message, decimal Balance, string? Code);
+public record SettingDto(string Key, string Value);
+public record LoadingSkeletonDto(int Id, string Name, string DisplayName, string CssClass, int DurationMs, int DelayMs, string Easing, string? ConfigJson, bool IsActive, int SortOrder);
