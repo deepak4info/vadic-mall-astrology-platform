@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4318 -H 0.0.0.0",
-    "dev:clean": "rm -rf .next && next dev -p 4318 -H 0.0.0.0",
+    "dev:clean": "rmdir /s /q .next && next dev -p 4318 -H 0.0.0.0",
     "build": "next build",
     "start": "next start -p 4318 -H 0.0.0.0",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "vitest run"
   },
   "dependencies": {
@@ -35,15 +35,15 @@
     "zod": "^3.25.76",
     "zustand": "^5.0.15"
   },
-"devDependencies": {
-  "@types/node": "^22",
-  "@types/react": "^18",
-  "@types/react-dom": "^18",
-  "eslint": "^9",
-  "eslint-config-next": "^16.3.5",
-  "postcss": "^8",
-  "tailwindcss": "^3.4.1",
-  "typescript": "^5",
-  "vitest": "^5.0.1"
-}
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5",
+    "vitest": "^5.0.1"
+  }
 }
