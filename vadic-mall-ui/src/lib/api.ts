@@ -1,7 +1,8 @@
 import axios from "axios";
 import type { AuthResponse } from "@/lib/types";
+import { getApiUrl } from "@/lib/api-url";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://errajeshverma05-001-site1.etempurl.com/api";
+const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,

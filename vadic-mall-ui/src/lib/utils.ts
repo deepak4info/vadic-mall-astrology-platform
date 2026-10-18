@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getApiUrl } from "@/lib/api-url";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,7 +19,7 @@ export function getDiscountPercent(price: number, salePrice?: number | null) {
   return Math.round(((price - salePrice) / price) * 100);
 }
 
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL || "https://errajeshverma05-001-site1.etempurl.com/api").replace(/\/api$/, "");
+const API_ORIGIN = getApiUrl().replace(/\/api$/, "");
 
 // Product/pooja image URLs come back from the API as paths relative to the .NET server
 // (e.g. "/images/products/x.jpg"), not the Next.js origin, so they need the API's own
