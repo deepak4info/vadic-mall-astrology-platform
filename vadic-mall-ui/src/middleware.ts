@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://deepak4info-001-site1.ftempurl.com/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://errajeshverma05-001-site1.etempurl.com/api";
 const apiOrigin = new URL(API_URL).origin;
 const isDev = process.env.NODE_ENV === "development";
 
